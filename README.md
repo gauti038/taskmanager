@@ -53,15 +53,6 @@ more at https://www.weave.works/oss/scope/
 
 # Minikube Solution
 
-## Install minikube  on Ubuntu :
-    ``` 
-        sudo sh minikube-install.sh 
-    ```
-    This will install minikube and start it with 4 CPUs and 8GB RAM
-    Also enables ingress and registry of minikube addons
-
-## Solution
-
 1. Install weavescope for better visual representation
 
     ``` 

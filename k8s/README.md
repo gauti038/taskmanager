@@ -4,8 +4,10 @@
 [Official Docker Installation](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
 ## add an user to docker group
-sudo groupadd docker
-sudo usermod -aG docker $USER
+```
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+```
 
 # Install Minikube
 
