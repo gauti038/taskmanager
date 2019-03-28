@@ -1,6 +1,6 @@
 CircleCI Badge
 
-[![Build Status][CircleCI](https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg)](https://circleci.com/gh/gauti038/taskmanager/tree/master)
+Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg)](https://circleci.com/gh/gauti038/taskmanager/tree/master)
 
 # DOCKER CHALLENGE
 
