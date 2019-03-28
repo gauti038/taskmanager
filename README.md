@@ -1,87 +1,99 @@
-# taskmanager
-A spring4 + Angular exercise bulding a task management website
+# CircleCI Challenge
+
+[![CircleCI](https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg)](https://circleci.com/gh/gauti038/taskmanager/tree/master)
 
 
-## Architecture
+# DOCKER CHALLENGE
 
-![architecture](/doc/taskmanager.png?raw=true)
+## Assumptions
+1. Run the application on non Kubernetes environment - (localhost or ubuntu server)
+2. Java 7+, Maven 3.5+ and docker-compose (latest) are already installed on the machine
+3. Only web app must be exposed. DB and scheduler must not be accessible on localhost.
+4. Containers must talk to each other using only service names
+5. Size of final docker images must be as small as possible (around 200 MB in this case)
 
-you can have a look at a live drawing [here](https://docs.google.com/drawings/d/1Kst-gEPnU7SV6RhGqVKwuxKECHpmFvoV097tDaNgXAg).
+## Option 1 - Java, Maven and docker-compose 
 
-## Requirements
+## Method and Solution
+1. clone this repo and do a maven build
+    ``` git clone git@github.com:gauti038/taskmanager.git 
+        cd taskmanager 
+        mvn clean install -Pweb 
+        mvn clean install -Pscheduler
+    ```
+2. These commands will download and build all the required files
+3. Start docker compose 
+    ```
+        docker-compose up --build
+    ```
+4. The docker compose uses docker files - Dockerfile-web-localhost & Dockerfile-scheduler-localhost
+5. The dockerfiles just copies the required jar files into a alpine base image (reduce image size)
+6. Open http://localhost:8080 for the web application 
+7. Open http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22} for weavescope (an advanced realtime container interations UI)
+8. dependencies are set to each of the containers
 
-* git
-* JDK8
-* Maven3
-* Postgresql
-* Docker
+## Option 2 - Only docker-compose
 
-## Build
+## Method and Solution
+1. clone this repo and do a maven build
+    ``` git clone git@github.com:gauti038/taskmanager.git 
+        cd taskmanager 
+        # comment right sections of docker-compose.yml file
+        docker-compose up --build
+    ```
+2. These commands will start multi-stage docker builds to reduce image sizes
+3. The docker compose uses docker files - Dockerfile-web-compose & Dockerfile-scheduler-compose
+4. The dockerfiles first use maven image (large in size) and does a maven build. The jar is then copied onto a light-weight java alpine docker image 
+5. The disadvantage of this method is - it takes too much time to build (15+ mins) 
+6. Once the containers start, open http://localhost:8080 for the web application 
+7. Open http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22} for weavescope (an advanced realtime container interations UI)
+8. dependencies are set to each of the containers
 
-### Building with maven
+Weave scope is a beautiful UI which shows live interactions between pods. 
+more at https://www.weave.works/oss/scope/ 
 
-Clone this repo and build first the **web** modules: *endpoints*, *service*, *persistance*.
-Note that the latter 2 are shared also with the scheduler.
+# Minikube Solution
 
-```
-#$ mvn clean install -Pweb
-#$ mvn eclipse:clean eclipse:eclipse -Pweb
-```
+## Install minikube  on Ubuntu :
+    sudo sh minikube.sh
+    This will install minikube and start it with 4 CPUs and 8GB RAM
+    Also enables ingress and registry of minikube addons
 
-Then build the **scheduler**:
-```
-#$ mvn clean install -Pscheduler
-#$ mvn eclipse:clean eclipse:eclipse -Pscheduler
-```
+## Solution
 
-If you want also to produce the Docker images for both components add the profile **docker** e.g.
+1. Install weavescope for better visual representation
 
-```
-#$ mvn clean install -Pscheduler,docker
-```
+``` kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')" ```
 
-## Run
+2. Use minikube registry 
+    ``` eval $(minikube docker-env) ```
 
-### Database configuration
+3. Maven build and install
+    ```
+    mvn clean install -Pweb
+    mvn clean install -Pscheduler
+    ```
+4. Build docker images required
+    ```
+    docker build -t web:minikube -f ./Dockerfile-web-localhost .
+    docker build -t scheduler:minikube -f ./Dockerfile-scheduler-localhost . 
+    ```
+    This builds the image and stores them in the docker registry of minikube
+5. Pull postgres image 
+    ``` docker pull postgres ```
+6. Apply the Kubernetes yaml files
+    ```
+    kubectl apply -f k8s/postgres.yaml
+    kubectl apply -f k8s/web.yaml
+    kubectl apply -f k8s/scheduler.yaml
+    kubectl apply -f k8s/ingress.yaml
+    ```
+7. Add domain name needed for the ingress IP
+    ``` echo "$(minikube ip) omnius-challenge.demo" | sudo tee -a /etc/hosts ```
+8. Open http://omnius-challenge.demo/ on browser and you can access webapp 
 
-Long story short: create the Postgres database described below and then skip to **Option1** or **Option2**
-* name **taskmanager**
-* on **localhost**
-* port **5432**
-* user **postgres**
-* password **postgres**
 
-Here hare some more details... 
 
-the database connection params are stored in 
 
-```
-<root_repo>\endpoints\src\main\resources\application.properties
-
-<root_repo>\tasks-manager\scheduler\src\main\resources\application.properties
-```
-
-and by default are configured for postgres, the web component is set to CREATE-DROP and the scheduler to VALIDATE. So the former must be executed before the latter.
-
-If you don't use the dockerized environment (Options 1 and 2) you have to take care on configure a postgres instance (or drop all the postgres properties and use H2 in memory)
-
-### Option 1 - build and run the jar files
-* Build the *web* and the *scheduler* jars files as reported in the **Build** section. You will end up having `endpoints-0.1-SNAPSHOT.jar` and `scheduler-0.1-SNAPSHOT.jar` in your local maven repo
-* Create the database as described in *Database configuration*
-* place the jars in a convinient location and the run ``java -jar`` first web then scheduler module.
-
-### Option 2 - run from eclipse
-* Create the database as described in *Database configuration*
-* Run the classes ``EndpointsMain`` and ``SchedulerMain``. It can be done eclipse after having imported the project or directly from the command line.
-
-### [WIP3]OPTION 3 - run via dockercompose
-
-*The coolest option but it still doesn't work :(*
-
-In the repo root run ``#$ sudo docker-compose up``
-
-Open the browser at http://localhost:8080 and have fun!
-
-![preview](/doc/preview.jpg?raw=true)
 
 
