@@ -1,6 +1,19 @@
-# CircleCI Challenge
+# CircleCI Challenge Badge
+
+https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg
 
 [![CircleCI](https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg)](https://circleci.com/gh/gauti038/taskmanager/tree/master)
+
+!https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg!:https://circleci.com/gh/gauti038/taskmanager/tree/master
+
+{<img src="https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg" alt="CircleCI" />}[https://circleci.com/gh/gauti038/taskmanager/tree/master]
+
+image:https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg["CircleCI", link="https://circleci.com/gh/gauti038/taskmanager/tree/master"]
+
+.. image:: https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/gauti038/taskmanager/tree/master
+
+=for HTML <a href="https://circleci.com/gh/gauti038/taskmanager/tree/master"><img src="https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg"></a>
 
 
 # DOCKER CHALLENGE
