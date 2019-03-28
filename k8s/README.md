@@ -1,6 +1,15 @@
-#!/bin/bash
+# Install Docker
 
-#install kubectl and virtualbox
+## Official Webiste steps to install
+[Official Docker Installation](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+
+## add an user to docker group
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+# Install Minikube
+
+## install kubectl and virtualbox
 apt-get update && apt-get install -y apt-transport-https curl gnupg2
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
@@ -10,13 +19,14 @@ add-apt-repository "deb http://download.virtualbox.org/virtualbox/debian xenial 
 apt-get update
 apt-get install -y kubectl virtualbox-6.0
 
-# donwload minikube and add it to bin
+### donwload minikube and add it to bin
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64   && chmod +x minikube
 cp minikube /usr/local/bin && rm minikube
 
-#start minikube
+### start minikube
 minikube start --cpus 4 --memory 8192
 
-#enable ingress and registry
+### enable ingress and registry
 minikube addons enable ingress
 minikube addons enable registry
+

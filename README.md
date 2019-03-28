@@ -1,6 +1,4 @@
-CircleCI Badge
-
-Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg)](https://circleci.com/gh/gauti038/taskmanager/tree/master)
+CircleCI Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanager/tree/master.svg?style=svg)](https://circleci.com/gh/gauti038/taskmanager/tree/master)
 
 # DOCKER CHALLENGE
 
@@ -15,7 +13,8 @@ Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanager/tree/ma
 
 ## Method and Solution
 1. clone this repo and do a maven build
-    ``` git clone git@github.com:gauti038/taskmanager.git 
+    ``` 
+        git clone git@github.com:gauti038/taskmanager.git 
         cd taskmanager 
         mvn clean install -Pweb 
         mvn clean install -Pscheduler
@@ -35,9 +34,10 @@ Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanager/tree/ma
 
 ## Method and Solution
 1. clone this repo and do a maven build
-    ``` git clone git@github.com:gauti038/taskmanager.git 
+    ``` 
+        git clone git@github.com:gauti038/taskmanager.git 
         cd taskmanager 
-        # comment right sections of docker-compose.yml file
+        # comment proper sections of docker-compose.yml file
         docker-compose up --build
     ```
 2. These commands will start multi-stage docker builds to reduce image sizes
@@ -54,7 +54,9 @@ more at https://www.weave.works/oss/scope/
 # Minikube Solution
 
 ## Install minikube  on Ubuntu :
-    sudo sh minikube.sh
+    ``` 
+        sudo sh minikube-install.sh 
+    ```
     This will install minikube and start it with 4 CPUs and 8GB RAM
     Also enables ingress and registry of minikube addons
 
@@ -62,10 +64,15 @@ more at https://www.weave.works/oss/scope/
 
 1. Install weavescope for better visual representation
 
-``` kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')" ```
+    ``` 
+        kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')" 
+    ```
 
-2. Use minikube registry 
-    ``` eval $(minikube docker-env) ```
+2. Use minikube registry. 
+    ``` 
+        eval $(minikube docker-env) 
+    ```
+    This sets a list of Bash environment variable exports to configure your local environment to re-use the Docker daemon inside the Minikube instance. (Basically sharing the registry)
 
 3. Maven build and install
     ```
@@ -77,9 +84,13 @@ more at https://www.weave.works/oss/scope/
     docker build -t web:minikube -f ./Dockerfile-web-localhost .
     docker build -t scheduler:minikube -f ./Dockerfile-scheduler-localhost . 
     ```
-    This builds the image and stores them in the docker registry of minikube
+    This builds the image and stores them in the docker registry of minikube.
+
 5. Pull postgres image 
-    ``` docker pull postgres ```
+    ``` 
+        docker pull postgres 
+    ```
+
 6. Apply the Kubernetes yaml files
     ```
     kubectl apply -f k8s/postgres.yaml
@@ -88,7 +99,9 @@ more at https://www.weave.works/oss/scope/
     kubectl apply -f k8s/ingress.yaml
     ```
 7. Add domain name needed for the ingress IP
-    ``` echo "$(minikube ip) omnius-challenge.demo" | sudo tee -a /etc/hosts ```
+    ``` 
+        echo "$(minikube ip) omnius-challenge.demo" | sudo tee -a /etc/hosts 
+    ```
 8. Open http://omnius-challenge.demo/ on browser and you can access webapp 
 
 
