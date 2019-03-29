@@ -27,7 +27,7 @@ CircleCI Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanage
 4. The docker compose uses docker files - Dockerfile-web-localhost & Dockerfile-scheduler-localhost
 5. The dockerfiles just copies the required jar files into a alpine base image (reduce image size)
 6. Open http://localhost:8080 for the web application 
-7. Open http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22} for weavescope (an advanced realtime container interations UI)
+7. Open [Weavescope](http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22}) for weavescope (an advanced realtime container interations UI)
 8. dependencies are set to each of the containers
 
 ## Option 2 - Only docker-compose
@@ -45,7 +45,7 @@ CircleCI Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanage
 4. The dockerfiles first use maven image (large in size) and does a maven build. The jar is then copied onto a light-weight java alpine docker image 
 5. The disadvantage of this method is - it takes too much time to build (15+ mins) 
 6. Once the containers start, open http://localhost:8080 for the web application 
-7. Open http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22} for weavescope (an advanced realtime container interations UI)
+7. Open [Weavescope](http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22}) for weavescope (an advanced realtime container interations UI)
 8. dependencies are set to each of the containers
 
 Weave scope is a beautiful UI which shows live interactions between pods. 
