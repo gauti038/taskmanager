@@ -53,11 +53,8 @@ more at https://www.weave.works/oss/scope/
 
 # Minikube Solution
 
-1. Install weavescope for better visual representation
-
-    ``` 
-        kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')" 
-    ```
+1. Make sure minikube is installed with required addons - 
+    [Minikube Installation Steps](k8s/README.md)
 
 2. Use minikube registry. 
     ``` 
@@ -84,10 +81,10 @@ more at https://www.weave.works/oss/scope/
 
 6. Apply the Kubernetes yaml files
     ```
-    kubectl apply -f k8s/postgres.yaml
-    kubectl apply -f k8s/web.yaml
-    kubectl apply -f k8s/scheduler.yaml
-    kubectl apply -f k8s/ingress.yaml
+    kubectl create -f k8s/postgres.yaml
+    kubectl create -f k8s/web.yaml
+    kubectl create -f k8s/scheduler.yaml
+    kubectl create -f k8s/ingress.yaml
     ```
 7. Add domain name needed for the ingress IP
     ``` 
