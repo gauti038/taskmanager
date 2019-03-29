@@ -85,7 +85,7 @@ The volume share ensures that even if server restarts, the images which are alre
     ```
 
 ## Build and Push images to registry
-1. Build commadn - 
+1. Build command - 
     ``` 
         docker build -t <iamge-name>:<tag> -f <docker file location> . 
     ```

@@ -1,4 +1,41 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    type: local
+  name: postgres-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: postgres-volume-claim
+    namespace: default
+  hostPath:
+    path: /home/postgres
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-volume-claim
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    limits:
+      storage: 1Gi
+    requests:
+      storage: 1Gi
+  storageClassName: local-storage
+  volumeName: postgres-volume
+---
+apiVersion: v1
 kind: Service
 metadata:
   labels:
@@ -51,11 +88,34 @@ spec:
         image: postgres
         imagePullPolicy: Always
         name: postgres
-        resources: {}
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        readinessProbe:
+          exec:
+            command: ["psql", "-w", "-U", "postgres", "-d", "taskmanager", "-c", "SELECT 1"]
+          initialDelaySeconds: 15
+          timeoutSeconds: 2
+        livenessProbe:
+          exec:
+            command: ["psql", "-w", "-U", "postgres", "-d", "taskmanager", "-c", "SELECT 1"]
+          initialDelaySeconds: 45
+          timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 800m
+            memory: 800Mi
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       restartPolicy: Always
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-volume-claim
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30

@@ -16,24 +16,3 @@ spec:
         backend:
           serviceName: web
           servicePort: 8080
----
-
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ingress-weave
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  backend:
-    serviceName: weave
-    servicePort: 80
-  rules:
-  - host: omnius-challenge.demo
-    http:
-      paths:
-      - path: /weave
-        backend:
-          serviceName: weave-scope-app
-          servicePort: 80
-

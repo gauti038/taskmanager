@@ -67,30 +67,52 @@ more at https://www.weave.works/oss/scope/
     mvn clean install -Pweb
     mvn clean install -Pscheduler
     ```
-4. Build docker images required
+4. Build the required docker images
     ```
     docker build -t web:minikube -f ./Dockerfile-web-localhost .
     docker build -t scheduler:minikube -f ./Dockerfile-scheduler-localhost . 
     ```
     This builds the image and stores them in the docker registry of minikube.
 
-5. Pull postgres image 
+5. Pull postgres image so that minikube has all images when we start deploying containers
     ``` 
         docker pull postgres 
     ```
 
-6. Apply the Kubernetes yaml files
+6. Apply the Kubernetes yaml files. I have only used simple YAML files for deployment and not used any helm charts.         All the deployments have readiness probe and liveness Probe.
+    * Postgres - has a service. shares a volume for data incase of restarts. Readiness probe is a psql command. 
+    * Web - has a service which is exposed on ingress. Readiness probe is tcp socket on 8080. Has resource limits for autoscaling. Autoscaler based on CPU at 70%.
+    * Scheduler - doesnt need a service, since not called or exposed. Readiness probe is tcp socket on 8080. Can be autoscaled based on resources. Autoscaler based on CPU at 70%.
     ```
-    kubectl create -f k8s/postgres.yaml
-    kubectl create -f k8s/web.yaml
-    kubectl create -f k8s/scheduler.yaml
-    kubectl create -f k8s/ingress.yaml
+    kubectl create -f k8s/
     ```
-7. Add domain name needed for the ingress IP
+    Wait for some time till all pods start running. (Dont worry if some of them restart)
+
+7. Add domain name needed for the ingress IP on your localhost
     ``` 
         echo "$(minikube ip) omnius-challenge.demo" | sudo tee -a /etc/hosts 
     ```
 8. Open http://omnius-challenge.demo/ on browser and you can access webapp 
+
+9. The same yamls can be used on Kubernetes with appropriate changes to docker registry.
+
+10. Commands to manually scale a deployment 
+    ```
+        kubectl scale deployment <deployment name> --replicas=<scale-count>
+
+        Eg: kubectl scale deployment web --replicas=3
+    ```
+11. Command to update the image for a deployment.
+    ```
+        kubectl set image deployment <deployment name> <container name>=<image name>:<tag>
+        
+        Eg: kubectl set image deployment web web=web:minikube2
+    ```
+12. Auto Complete Kubectl commands on bash 
+    ```
+        echo 'source <(kubectl completion bash)' >>~/.bashrc
+        source ~/.bashrc
+    ```
 
 
 
