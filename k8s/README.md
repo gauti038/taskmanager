@@ -59,10 +59,11 @@
                 --restart=always --name registry registry:2
     ``` 
 3. Install docker on the server. Start registry in insecure mode.
-``` 
-    docker run -d -p 5000:5000 --name docker-registry --restart=always -v /home/dockerRegistry:/var/lib/registry registry:2
-```
+    ``` 
+        docker run -d -p 5000:5000 --name docker-registry --restart=always -v /home/dockerRegistry:/var/lib/registry registry:2
+    ```
 The volume share ensures that even if server restarts, the images which are already pushed, are safe on the file system of the host machine.
+
 4. (Insecure Registry) If the registry server is on a secure LAN and you dont want to configure certificates specifically, follow this :
     * On all hosts where kubernetes or minikube is running
     * add these lines to the file : /etc/docker/daemon.json
@@ -71,6 +72,7 @@ The volume share ensures that even if server restarts, the images which are alre
         "insecure-registries":["<REGISTRY HOST IP>:5000"] 
         }
     ``` 
+
 5. (Optional - UI) You can also add a UI for the registry
     ```
         docker run \
@@ -83,7 +85,10 @@ The volume share ensures that even if server restarts, the images which are alre
     ```
 
 ## Build and Push images to registry
-1. Build - ``` docker build -t <iamge-name>:<tag> -f <docker file location> . ```
+1. Build commadn - 
+    ``` 
+        docker build -t <iamge-name>:<tag> -f <docker file location> . 
+    ```
 2. Tag the image 
     ```
     docker tag <image-name>:<tag> <private-registry-image>:<tag>
@@ -95,7 +100,7 @@ The volume share ensures that even if server restarts, the images which are alre
 
 ### Kubernetes/Minikube - pull image from private registry
 
- ``` 
-    kubectl create secret docker-registry regcred --docker-server=<REGISTRY-HOST-IP> --docker-username=<docker-username> --docker-password=<docker-password>
-```
+    ``` 
+        kubectl create secret docker-registry regcred --docker-server=<REGISTRY-HOST-IP> --docker-username=<docker-username> --docker-password=<docker-password>
+    ```
 
