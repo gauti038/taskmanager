@@ -11,7 +11,6 @@ CircleCI Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanage
 
 ## Option 1 - Java, Maven and docker-compose 
 
-## Method and Solution
 1. clone this repo and do a maven build
     ``` 
         git clone git@github.com:gauti038/taskmanager.git 
@@ -27,12 +26,11 @@ CircleCI Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanage
 4. The docker compose uses docker files - Dockerfile-web-localhost & Dockerfile-scheduler-localhost
 5. The dockerfiles just copies the required jar files into a alpine base image (reduce image size)
 6. Open http://localhost:8080 for the web application 
-7. Open [Weavescope](http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22}) for weavescope (an advanced realtime container interations UI)
+7. Open [Weavescope](http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22}) for an advanced realtime container interations UI.
 8. dependencies are set to each of the containers
 
 ## Option 2 - Only docker-compose
 
-## Method and Solution
 1. clone this repo and do a maven build
     ``` 
         git clone git@github.com:gauti038/taskmanager.git 
@@ -45,7 +43,7 @@ CircleCI Build Status : [![CircleCI](https://circleci.com/gh/gauti038/taskmanage
 4. The dockerfiles first use maven image (large in size) and does a maven build. The jar is then copied onto a light-weight java alpine docker image 
 5. The disadvantage of this method is - it takes too much time to build (15+ mins) 
 6. Once the containers start, open http://localhost:8080 for the web application 
-7. Open [Weavescope](http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22}) for weavescope (an advanced realtime container interations UI)
+7. Open [Weavescope](http://localhost:4040/#!/state/{%22pinnedMetricType%22:%22Memory%22,%22topologyId%22:%22containers%22}) for an advanced realtime container interations UI.
 8. dependencies are set to each of the containers
 
 Weave scope is a beautiful UI which shows live interactions between pods. 
@@ -53,8 +51,7 @@ more at https://www.weave.works/oss/scope/
 
 # Minikube Solution
 
-1. Make sure minikube is installed with required addons - 
-    [Minikube Installation Steps](k8s/README.md)
+1. Make sure minikube is installed with required addons - for steps follow [this](k8s/README.md) file 
 
 2. Use minikube registry. 
     ``` 
@@ -94,7 +91,7 @@ more at https://www.weave.works/oss/scope/
     ```
 8. Open http://omnius-challenge.demo/ on browser and you can access webapp 
 
-9. The same yamls can be used on Kubernetes with appropriate changes to docker registry.
+9. The same yamls can be used on Kubernetes with appropriate changes to docker registry location in image names.
 
 10. Commands to manually scale a deployment 
     ```

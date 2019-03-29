@@ -1,6 +1,6 @@
-# Install Docker
+# Install Minikube
 
-## Official Webiste steps to install
+## Install Docker
 [Official Docker Installation](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
 ## add an user to docker group
@@ -8,8 +8,6 @@
     sudo groupadd docker
     sudo usermod -aG docker $USER
 ```
-
-# Install Minikube
 
 ## install kubectl and virtualbox
 ```
@@ -29,7 +27,7 @@
     cp minikube /usr/local/bin && rm minikube
 ```
 
-### start minikube
+### start minikube with enough resources
 ```
     minikube start --cpus 4 --memory 8192
 ```
@@ -58,18 +56,17 @@
                 -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
                 --restart=always --name registry registry:2
     ``` 
-3. Install docker on the server. Start registry in insecure mode.
+3. (Insecure Registry) Install docker on the server. Start registry in insecure mode.
     ``` 
         docker run -d -p 5000:5000 --name docker-registry --restart=always -v /home/dockerRegistry:/var/lib/registry registry:2
     ```
 The volume share ensures that even if server restarts, the images which are already pushed, are safe on the file system of the host machine.
 
-4. (Insecure Registry) If the registry server is on a secure LAN and you dont want to configure certificates specifically, follow this :
-    * On all hosts where kubernetes or minikube is running
-    * add these lines to the file : /etc/docker/daemon.json
+4. If the registry server is on a secure LAN and you dont want to configure certificates specifically, follow this :
+    * On all hosts where kubernetes or minikube is running add these lines to the file : /etc/docker/daemon.json
     ```
         { 
-        "insecure-registries":["<REGISTRY HOST IP>:5000"] 
+            "insecure-registries":["<REGISTRY HOST IP>:5000"] 
         }
     ``` 
 
